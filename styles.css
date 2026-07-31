@@ -511,96 +511,6 @@ svg {
   font-size: 13px;
 }
 
-.brand-story {
-  display: grid;
-  width: min(1180px, calc(100% - 48px));
-  min-height: 470px;
-  grid-template-columns: 1.08fr 0.92fr;
-  margin: 88px auto 0;
-  overflow: hidden;
-  border-radius: 16px;
-  background:
-    radial-gradient(circle at 90% 0, rgba(102, 63, 255, 0.22), transparent 36%),
-    var(--ink);
-  box-shadow: 0 28px 70px rgba(2, 8, 20, 0.18);
-  color: var(--white);
-}
-
-.brand-story-image {
-  position: relative;
-  min-height: 470px;
-  overflow: hidden;
-}
-
-.brand-story-image::after {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent 56%, var(--ink) 100%);
-  content: "";
-}
-
-.brand-story-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  filter: saturate(0.82) contrast(1.05);
-}
-
-.brand-story-image span {
-  position: absolute;
-  bottom: 22px;
-  left: 24px;
-  z-index: 1;
-  padding: 7px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 5px;
-  background: rgba(2, 8, 20, 0.68);
-  color: #d9e0ff;
-  font-family: Consolas, monospace;
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  backdrop-filter: blur(8px);
-}
-
-.brand-story-copy {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 52px 55px 52px 42px;
-}
-
-.brand-story-copy .section-kicker {
-  color: #8499ff;
-}
-
-.brand-story-copy h2 {
-  margin: 0;
-  font-size: clamp(31px, 3.7vw, 48px);
-  font-weight: 560;
-  letter-spacing: -0.045em;
-  line-height: 1.12;
-}
-
-.brand-story-copy > p:not(.section-kicker) {
-  margin: 24px 0 0;
-  color: #a9b2c4;
-  font-size: 14px;
-  line-height: 1.85;
-}
-
-.brand-link {
-  width: fit-content;
-  margin-top: 30px;
-  border-color: rgba(255, 255, 255, 0.28);
-  color: var(--white);
-}
-
-.brand-link:hover {
-  border-color: #6b7fff;
-  background: #3f5fff;
-}
-
 .releases-section,
 .download-guide {
   width: min(1180px, calc(100% - 48px));
@@ -1135,14 +1045,6 @@ svg {
     width: min(580px, 100%);
   }
 
-  .brand-story {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .brand-story-copy {
-    padding: 42px 34px;
-  }
-
   .summary-strip {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -1205,7 +1107,6 @@ svg {
   }
 
   .summary-strip,
-  .brand-story,
   .releases-section,
   .download-guide {
     width: min(100% - 32px, 1180px);
@@ -1223,28 +1124,6 @@ svg {
     grid-column: 1 / -1;
     border-top: 1px solid var(--line);
     border-right: 0;
-  }
-
-  .brand-story {
-    min-height: 0;
-    grid-template-columns: 1fr;
-    margin-top: 64px;
-  }
-
-  .brand-story-image {
-    min-height: 280px;
-  }
-
-  .brand-story-image::after {
-    background: linear-gradient(0deg, var(--ink), transparent 46%);
-  }
-
-  .brand-story-copy {
-    padding: 36px 24px 42px;
-  }
-
-  .brand-story-copy h2 br {
-    display: none;
   }
 
   .releases-section {
