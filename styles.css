@@ -1,16 +1,16 @@
 :root {
-  --ink: #07141c;
-  --ink-soft: #10232d;
-  --paper: #f4f7f8;
+  --ink: #020814;
+  --ink-soft: #0b1424;
+  --paper: #f5f6f9;
   --white: #ffffff;
-  --line: #d9e1e4;
-  --muted: #60717a;
-  --cyan: #61d5ee;
-  --cyan-strong: #17bddd;
-  --violet: #8d7cff;
-  --violet-soft: #ece9ff;
-  --success: #5de3ad;
-  --shadow: 0 18px 60px rgba(7, 20, 28, 0.1);
+  --line: #dcdfe8;
+  --muted: #697281;
+  --cyan: #4168ff;
+  --cyan-strong: #2f58ff;
+  --violet: #7a2cff;
+  --violet-soft: #eee8ff;
+  --success: #42e6a4;
+  --shadow: 0 18px 60px rgba(2, 8, 20, 0.11);
   color-scheme: light;
   font-family: "Pretendard", "Noto Sans KR", "Segoe UI", Arial, sans-serif;
   font-synthesis: none;
@@ -95,7 +95,18 @@ svg {
 .footer-brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+}
+
+.brand-logo {
+  display: block;
+  width: 230px;
+  height: auto;
+}
+
+.footer-logo {
+  display: block;
+  width: 210px;
+  height: auto;
 }
 
 .brand-mark {
@@ -168,8 +179,8 @@ svg {
   overflow: hidden;
   padding: 130px max(24px, calc((100vw - 1180px) / 2)) 92px;
   background:
-    radial-gradient(circle at 80% 10%, rgba(93, 103, 255, 0.2), transparent 28%),
-    radial-gradient(circle at 6% 70%, rgba(20, 189, 221, 0.1), transparent 27%),
+    linear-gradient(90deg, rgba(2, 8, 20, 0.97) 0%, rgba(2, 8, 20, 0.91) 45%, rgba(2, 8, 20, 0.68) 100%),
+    url("assets/plancklab-hero.jpg") center / cover no-repeat,
     var(--ink);
   color: var(--white);
 }
@@ -177,12 +188,12 @@ svg {
 .hero-grid {
   position: absolute;
   inset: 0;
-  opacity: 0.11;
+  opacity: 0.08;
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.16) 1px, transparent 1px);
   background-size: 46px 46px;
-  mask-image: linear-gradient(90deg, black, transparent 70%);
+  mask-image: linear-gradient(90deg, black, transparent 64%);
 }
 
 .hero::after {
@@ -191,9 +202,9 @@ svg {
   bottom: -280px;
   width: 540px;
   height: 540px;
-  border: 1px solid rgba(97, 213, 238, 0.18);
+  border: 1px solid rgba(87, 73, 255, 0.28);
   border-radius: 50%;
-  box-shadow: 0 0 0 58px rgba(97, 213, 238, 0.025), 0 0 0 116px rgba(97, 213, 238, 0.02);
+  box-shadow: 0 0 0 58px rgba(87, 73, 255, 0.04), 0 0 0 116px rgba(122, 44, 255, 0.025);
   content: "";
 }
 
@@ -206,7 +217,7 @@ svg {
 .eyebrow,
 .section-kicker {
   margin: 0 0 20px;
-  color: var(--cyan);
+  color: #7692ff;
   font-family: Consolas, "SFMono-Regular", monospace;
   font-size: 11px;
   font-weight: 700;
@@ -223,14 +234,14 @@ svg {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 18px var(--cyan);
+  background: #654bff;
+  box-shadow: 0 0 18px #654bff;
 }
 
 .hero h1 {
   max-width: 720px;
   margin: 0;
-  font-size: clamp(43px, 5vw, 71px);
+  font-size: clamp(43px, 4.6vw, 64px);
   font-weight: 680;
   letter-spacing: -0.055em;
   line-height: 1.04;
@@ -238,7 +249,7 @@ svg {
 
 .hero h1 em {
   color: transparent;
-  background: linear-gradient(95deg, var(--cyan), #aab0ff 70%);
+  background: linear-gradient(95deg, #4a75ff, #a24eff 78%);
   background-clip: text;
   font-style: normal;
 }
@@ -282,13 +293,13 @@ svg {
 }
 
 .button-primary {
-  background: var(--cyan);
-  color: #051218;
-  box-shadow: 0 8px 32px rgba(97, 213, 238, 0.2);
+  background: #3d65ff;
+  color: var(--white);
+  box-shadow: 0 8px 32px rgba(61, 101, 255, 0.28);
 }
 
 .button-primary:hover {
-  background: #83e3f6;
+  background: #5578ff;
 }
 
 .button-ghost {
@@ -324,7 +335,7 @@ svg {
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.13);
   border-radius: 16px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025));
+  background: linear-gradient(145deg, rgba(12, 20, 40, 0.88), rgba(5, 12, 27, 0.74));
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.24);
   backdrop-filter: blur(14px);
 }
@@ -434,7 +445,7 @@ svg {
   width: calc(100% + 56px);
   height: 58px;
   margin: 0 -28px;
-  color: rgba(97, 213, 238, 0.26);
+  color: rgba(95, 111, 255, 0.34);
   stroke-width: 1;
 }
 
@@ -484,7 +495,7 @@ svg {
 .verified-copy svg {
   width: 33px;
   height: 33px;
-  color: #2aa982;
+  color: #5d43e6;
 }
 
 .verified-copy span {
@@ -498,6 +509,96 @@ svg {
   color: var(--ink);
   font-family: inherit;
   font-size: 13px;
+}
+
+.brand-story {
+  display: grid;
+  width: min(1180px, calc(100% - 48px));
+  min-height: 470px;
+  grid-template-columns: 1.08fr 0.92fr;
+  margin: 88px auto 0;
+  overflow: hidden;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 90% 0, rgba(102, 63, 255, 0.22), transparent 36%),
+    var(--ink);
+  box-shadow: 0 28px 70px rgba(2, 8, 20, 0.18);
+  color: var(--white);
+}
+
+.brand-story-image {
+  position: relative;
+  min-height: 470px;
+  overflow: hidden;
+}
+
+.brand-story-image::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 56%, var(--ink) 100%);
+  content: "";
+}
+
+.brand-story-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.82) contrast(1.05);
+}
+
+.brand-story-image span {
+  position: absolute;
+  bottom: 22px;
+  left: 24px;
+  z-index: 1;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 5px;
+  background: rgba(2, 8, 20, 0.68);
+  color: #d9e0ff;
+  font-family: Consolas, monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  backdrop-filter: blur(8px);
+}
+
+.brand-story-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 52px 55px 52px 42px;
+}
+
+.brand-story-copy .section-kicker {
+  color: #8499ff;
+}
+
+.brand-story-copy h2 {
+  margin: 0;
+  font-size: clamp(31px, 3.7vw, 48px);
+  font-weight: 560;
+  letter-spacing: -0.045em;
+  line-height: 1.12;
+}
+
+.brand-story-copy > p:not(.section-kicker) {
+  margin: 24px 0 0;
+  color: #a9b2c4;
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.brand-link {
+  width: fit-content;
+  margin-top: 30px;
+  border-color: rgba(255, 255, 255, 0.28);
+  color: var(--white);
+}
+
+.brand-link:hover {
+  border-color: #6b7fff;
+  background: #3f5fff;
 }
 
 .releases-section,
@@ -516,7 +617,7 @@ svg {
 
 .section-kicker {
   margin-bottom: 14px;
-  color: #168eaa;
+  color: #4f60df;
 }
 
 .section-heading h2,
@@ -549,7 +650,7 @@ svg {
 
 .search-box:focus-within {
   border-color: var(--cyan-strong);
-  box-shadow: 0 0 0 3px rgba(23, 189, 221, 0.12);
+  box-shadow: 0 0 0 3px rgba(47, 88, 255, 0.12);
 }
 
 .search-box svg {
@@ -592,7 +693,7 @@ svg {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: #177f97;
+  color: #445bd1;
   font-family: inherit;
   font-weight: 700;
 }
@@ -671,8 +772,8 @@ svg {
 }
 
 .release-badge.latest {
-  background: #dff8fd;
-  color: #087c94;
+  background: #e7ebff;
+  color: #3952cc;
 }
 
 .release-badge.beta {
@@ -700,7 +801,7 @@ svg {
   align-items: center;
   gap: 6px;
   margin-top: 22px;
-  color: #177f97;
+  color: #445bd1;
   font-size: 11px;
   font-weight: 700;
 }
@@ -759,8 +860,8 @@ svg {
 }
 
 .asset-link:hover {
-  border-color: #8fd6e5;
-  background: #f7fcfd;
+  border-color: #a9b5ff;
+  background: #f8f9ff;
   transform: translateY(-1px);
 }
 
@@ -770,8 +871,8 @@ svg {
   height: 34px;
   place-items: center;
   border-radius: 7px;
-  background: #e8f8fb;
-  color: #128da7;
+  background: #edf0ff;
+  color: #445bd1;
 }
 
 .asset-icon svg,
@@ -907,7 +1008,7 @@ svg {
 }
 
 .markdown-body a {
-  color: #087d98;
+  color: #4058cf;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -1018,7 +1119,7 @@ svg {
 }
 
 :focus-visible {
-  outline: 3px solid rgba(97, 213, 238, 0.65);
+  outline: 3px solid rgba(65, 104, 255, 0.65);
   outline-offset: 3px;
 }
 
@@ -1032,6 +1133,14 @@ svg {
 
   .latest-panel {
     width: min(580px, 100%);
+  }
+
+  .brand-story {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .brand-story-copy {
+    padding: 42px 34px;
   }
 
   .summary-strip {
@@ -1063,6 +1172,10 @@ svg {
     display: none;
   }
 
+  .brand-logo {
+    width: 205px;
+  }
+
   .hero {
     padding: 122px 20px 70px;
   }
@@ -1092,6 +1205,7 @@ svg {
   }
 
   .summary-strip,
+  .brand-story,
   .releases-section,
   .download-guide {
     width: min(100% - 32px, 1180px);
@@ -1109,6 +1223,28 @@ svg {
     grid-column: 1 / -1;
     border-top: 1px solid var(--line);
     border-right: 0;
+  }
+
+  .brand-story {
+    min-height: 0;
+    grid-template-columns: 1fr;
+    margin-top: 64px;
+  }
+
+  .brand-story-image {
+    min-height: 280px;
+  }
+
+  .brand-story-image::after {
+    background: linear-gradient(0deg, var(--ink), transparent 46%);
+  }
+
+  .brand-story-copy {
+    padding: 36px 24px 42px;
+  }
+
+  .brand-story-copy h2 br {
+    display: none;
   }
 
   .releases-section {

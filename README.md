@@ -11,6 +11,7 @@ PLANCK MASKLESS LITHO의 버전별 릴리스 노트와 배포 파일을 제공�
 - 이 저장소의 GitHub Releases API에서 공개된 버전과 업데이트 노트를 자동으로 불러옵니다.
 - 모든 다운로드는 각 GitHub Release에 첨부된 원본 배포 파일을 가리킵니다.
 - 소프트웨어 소스 코드는 이 저장소에 포함하지 않습니다.
+- 로고와 브랜드 이미지는 [PLANCKLAB 공식 홈페이지](https://www.planck.co.kr/)의 자산을 사용합니다.
 
 ## Local preview
 
