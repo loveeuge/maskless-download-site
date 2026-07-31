@@ -1,6 +1,22 @@
 const REPOSITORY = "loveeuge/PLANCK-MASKLESS-SW";
 const API_URL = `https://api.github.com/repos/${REPOSITORY}/releases?per_page=100`;
 const RELEASES_URL = `https://github.com/${REPOSITORY}/releases`;
+const ORIGINAL_DATES = {
+  "v2.1.3": "2026-07-28T10:32:57Z",
+  "v2.1.2": "2026-06-24T01:57:41Z",
+  "v2.1": "2026-06-11T05:26:23Z",
+  "v2.0.10.5": "2026-06-10T13:34:44Z",
+  "v2.0.10.4": "2026-06-10T07:32:28Z",
+  "v2.0.10": "2026-06-08T01:47:21Z",
+  "v2.0.9": "2026-06-04T10:08:52Z",
+  "v2.0.8.9.5": "2026-06-04T07:41:28Z",
+  "v2.0.8.9": "2026-06-04T01:49:47Z",
+  "v2.0.8.8": "2026-05-22T09:08:16Z",
+  "v2.0.8": "2026-05-14T12:19:22Z",
+  "v2.0.7": "2026-05-06T07:12:38Z",
+  "v2.0.6": "2026-04-08T11:34:39Z",
+  "v2.0.5": "2026-03-26T06:11:20Z",
+};
 
 const releaseList = document.querySelector("#release-list");
 const searchInput = document.querySelector("#release-search");
@@ -28,6 +44,10 @@ function formatDate(value) {
     month: "long",
     day: "numeric",
   }).format(new Date(value));
+}
+
+function releaseDateValue(release) {
+  return ORIGINAL_DATES[release.tag_name] || release.published_at;
 }
 
 function formatBytes(bytes) {
@@ -186,8 +206,9 @@ function createReleaseCard(release, index) {
   }
   indexTop.append(badges);
   indexTop.append(createElement("p", "release-version", release.tag_name));
-  const date = createElement("time", "release-date", formatDate(release.published_at));
-  date.dateTime = release.published_at || "";
+  const publishedAt = releaseDateValue(release);
+  const date = createElement("time", "release-date", formatDate(publishedAt));
+  date.dateTime = publishedAt || "";
   indexTop.append(date);
 
   const sourceLink = createElement("a", "", "릴리스 원문");
@@ -223,14 +244,15 @@ function createReleaseCard(release, index) {
 
 function renderHero(latest) {
   const primaryAsset = choosePrimaryAsset(latest.assets);
+  const publishedAt = releaseDateValue(latest);
   document.querySelector("#latest-version").textContent = latest.tag_name;
   document.querySelector("#latest-panel-title").textContent = firstSummary(latest.body, latest.name);
 
   const date = document.querySelector("#latest-date");
-  date.textContent = `Released ${formatDate(latest.published_at)}`;
-  date.dateTime = latest.published_at || "";
+  date.textContent = `Released ${formatDate(publishedAt)}`;
+  date.dateTime = publishedAt || "";
   document.querySelector("#latest-assets").textContent = `${latest.assets?.length || 0} files`;
-  document.querySelector("#latest-meta").textContent = `${formatDate(latest.published_at)} 공개 · GitHub Releases 제공`;
+  document.querySelector("#latest-meta").textContent = `${formatDate(publishedAt)} 공개 · GitHub Releases 제공`;
 
   const download = document.querySelector("#latest-download");
   download.classList.remove("is-disabled");
@@ -305,7 +327,7 @@ async function loadReleases() {
     const data = await response.json();
     releases = data
       .filter((release) => !release.draft)
-      .sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
+      .sort((a, b) => new Date(releaseDateValue(b)) - new Date(releaseDateValue(a)));
     if (!releases.length) throw new Error("No releases found");
 
     renderHero(releases[0]);
