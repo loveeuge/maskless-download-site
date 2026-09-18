@@ -19,6 +19,7 @@ The two-line heading is `마스크리스 SW` / `다운로드` in Korean and `Mas
 - Korean displays the original GitHub release titles and notes. English translations are maintained in `release-notes.en.json`, keyed by the exact release tag.
 - All downloads point to the original files attached to each GitHub Release. Translations do not change release assets or the original notes on GitHub.
 - This repository contains the download website, not the instrument-control application source code.
+- The header GitHub button and footer repository link are intentionally omitted. Release details and download links remain available.
 - Logos and brand images come from the [PLANCKLAB website](https://www.planck.co.kr/).
 
 ## Updating release notes
@@ -29,14 +30,20 @@ In English mode, a missing translation falls back to English notes from GitHub o
 
 CSS, JavaScript, the language module, and English notes use versioned asset URLs. Update their matching version strings when publishing UI or translation changes to avoid using stale assets from a previous deployment.
 
+### v2.1.4 distribution
+
+The application release originates in `PLANCK-INC/MASKLESSLITHO` (private). The public `v2.1.4` release here mirrors its three distribution binaries/archives and `SHA256SUMS.txt` without rebuilding or modifying them. Keep filenames and the source release date (`2026-09-18T06:27:21Z`) unchanged; verify each downloaded file against the source asset digest and checksum manifest before uploading, then compare the public asset digests. Never make the application source repository public to serve downloads.
+
+The Korean notes retain the original release text, with a notice that linked development documentation requires repository access. The English translation describes the same changes and QA results reported by the application release; these are not new application tests performed by this website. Version 2.1.4 removes Motorized Focus from the standard edition and reserves it for a future Pro edition, so the current setup guide must not claim it is bundled. Historical notes for v2.1.3 and earlier retain their original behavior.
+
 ## PC specifications guide
 
 The final section, `#pc-specs`, compares minimum **planning guidelines** and recommended PC configurations in both languages. It describes the desktop application, not the browser requirements for this website.
 
-- Scope: MASKLESS LITHO **v2.1.3**. Review the version label and specifications when publishing a newer application release.
+- Scope: MASKLESS LITHO **v2.1.4**, standard edition. Review the version label and specifications when publishing a newer application release.
 - Suggested baseline: Windows 11 x64 on Intel/AMD, a Windows 11-compatible 4-core CPU, 8 GB RAM, and an SSD with 5 GB of free working space. Suggested recommended configuration: 6 or more cores, 16 GB RAM (32 GB for large GDS/camera workflows), and an NVMe SSD with 20 GB free. These are not benchmark-verified minimums or a performance guarantee; storage excludes the operating system and growing user data.
-- Verified software constraints in the application source at tag `v2.1.3`: `ui/dlp_display_policy.py` requires DLP output at 1920 x 1080 and 100% scaling. `ui/uv_keystone_window.py` also requires a separate main/camera monitor with matching resolution and scaling for Calibration. This is not a blanket ban on using a 4K main monitor outside Calibration.
-- Packaging and driver guidance follows the application's tagged README. Python, GDS conversion, and Motorized Focus components are bundled; hardware drivers may still need installation. Do not infer hardware validation from the website tests.
+- Verified software constraints in the application source at tag `v2.1.4`: `ui/dlp_display_policy.py` requires DLP output at 1920 x 1080 and 100% scaling. `ui/uv_keystone_window.py` also requires a separate main/camera monitor with matching resolution and scaling for Calibration. This is not a blanket ban on using a 4K main monitor outside Calibration.
+- Packaging and driver guidance follows the application's tagged README. Python and GDS conversion components are bundled, but Motorized Focus is excluded from v2.1.4. DLP drivers may still need installation, and the microscope camera uses an external application. Do not infer hardware validation from the website tests.
 - OS guidance references [Qt 6.9 supported platforms](https://doc.qt.io/archives/qt-6.9/supported-platforms.html) and [Microsoft Windows 11 requirements](https://www.microsoft.com/en-us/windows/windows-11-specifications). Qt compatibility alone does not certify the application, equipment drivers, or suggested CPU/RAM figures. Windows 11's own processor, firmware, and storage requirements must also be met.
 
 Copy is maintained in `i18n.mjs` with a matching Korean HTML fallback. The accessible comparison table scrolls within its container on narrow screens.

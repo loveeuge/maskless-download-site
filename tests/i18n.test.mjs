@@ -43,6 +43,28 @@ test("the headline uses the requested two lines in each language", () => {
   assert.equal(message("en", "headingSecond"), "Download");
 });
 
+test("repository navigation is removed without removing release access", () => {
+  const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+  assert.doesNotMatch(html, /class="nav-github"/);
+  assert.doesNotMatch(html, /href="https:\/\/github\.com\/loveeuge\/maskless-download-site\/?"/);
+  assert.match(html, /href="https:\/\/github\.com\/loveeuge\/maskless-download-site\/releases"/);
+  assert.match(html, /data-language="ko"[^>]*>Kor</);
+  assert.match(html, /data-language="en"[^>]*>En</);
+});
+
+test("v2.1.4 notes and current setup distinguish standard edition from historical Focus builds", () => {
+  const notes = JSON.parse(readFileSync(new URL("../release-notes.en.json", import.meta.url), "utf8"));
+  assert.equal(notes["v2.1.4"].name, "MASKLESS LITHO v2.1.4");
+  for (const name of ["maskless_v2_1_4.exe", "maskless_v2_1_4.zip", "maskless_v2_1_4_fast.zip", "SHA256SUMS.txt"]) {
+    assert.ok(notes["v2.1.4"].body.includes(name), name);
+  }
+  assert.match(notes["v2.1.4"].body, /806 passed, 28 subtests passed/);
+  assert.match(notes["v2.1.4"].body, /Motorized Focus is excluded/);
+  assert.match(message("en", "specsSetupNote"), /Motorized Focus is excluded/);
+  assert.match(message("ko", "specsSetupNote"), /Motorized Focus는 제외/);
+  assert.match(notes["v2.1.3"].body, /Include Focus v0.1.1/);
+});
+
 test("PC specifications remain the final section with localized, accessible comparison rows", () => {
   const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
   const section = html.match(/<section class="system-requirements"[\s\S]*?<\/section>/)?.[0];

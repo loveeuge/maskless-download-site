@@ -1,9 +1,10 @@
-import { LANGUAGE_STORAGE_KEY, LOCALES, cleanText, localizeRelease, message, resolveLanguage } from "./i18n.mjs?v=20260918-pc-specs-1";
+import { LANGUAGE_STORAGE_KEY, LOCALES, cleanText, localizeRelease, message, resolveLanguage } from "./i18n.mjs?v=20260918-v214-1";
 
 const REPOSITORY = "loveeuge/maskless-download-site";
 const API_URL = `https://api.github.com/repos/${REPOSITORY}/releases?per_page=100`;
 const RELEASES_URL = `https://github.com/${REPOSITORY}/releases`;
 const ORIGINAL_DATES = {
+  "v2.1.4": "2026-09-18T06:27:21Z",
   "v2.1.3": "2026-07-28T10:32:57Z",
   "v2.1.2": "2026-06-24T01:57:41Z",
   "v2.1": "2026-06-11T05:26:23Z",
@@ -106,7 +107,7 @@ function formatBytes(bytes) {
 
 async function loadEnglishNotes() {
   try {
-    const response = await fetch("release-notes.en.json?v=20260918-pc-specs-1");
+    const response = await fetch("release-notes.en.json?v=20260918-v214-1");
     if (!response.ok) throw new Error(`English release notes returned ${response.status}`);
     const translations = await response.json();
     if (!translations || typeof translations !== "object" || Array.isArray(translations)) {
@@ -214,6 +215,7 @@ function renderMarkdown(body) {
 
 function getAssetLabel(name) {
   const normalized = name.toLowerCase();
+  if (normalized === "sha256sums.txt") return t("checksumFile");
   if (normalized.includes("fast")) return t("fastPortable");
   if (normalized.endsWith(".exe")) return t("windowsExecutable");
   if (normalized.endsWith(".zip")) return t("zipArchive");
