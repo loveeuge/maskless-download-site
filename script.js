@@ -38,8 +38,8 @@ function createElement(tag, className, text) {
 }
 
 function formatDate(value) {
-  if (!value) return "날짜 정보 없음";
-  return new Intl.DateTimeFormat("ko-KR", {
+  if (!value) return "Date unavailable";
+  return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -51,7 +51,7 @@ function releaseDateValue(release) {
 }
 
 function formatBytes(bytes) {
-  if (!Number.isFinite(bytes) || bytes <= 0) return "크기 정보 없음";
+  if (!Number.isFinite(bytes) || bytes <= 0) return "Size unavailable";
   const units = ["B", "KB", "MB", "GB"];
   const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
   const value = bytes / 1024 ** index;
@@ -60,6 +60,37 @@ function formatBytes(bytes) {
 
 function cleanText(text = "") {
   return text.replace(/^\uFEFF/, "").replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "").trim();
+}
+
+function localizeRelease(release, translations) {
+  const translated = translations[release.tag_name];
+  const hasKorean = (text) => /[\u1100-\u11FF\u3130-\u318F\uAC00-\uD7AF]/.test(text || "");
+  const englishText = (text) => typeof text === "string" && !hasKorean(text) ? cleanText(text) : "";
+  const originalName = cleanText(release.name || "");
+  const originalBody = cleanText(release.body || "");
+  return {
+    ...release,
+    name: englishText(translated?.name) || englishText(originalName) || `MASKLESS LITHO ${release.tag_name}`,
+    body: englishText(translated?.body) || (hasKorean(originalBody)
+      ? "English release notes are not available yet. Use the View on GitHub link to read the original notes."
+      : originalBody),
+  };
+}
+
+async function loadEnglishNotes() {
+  try {
+    const response = await fetch("release-notes.en.json");
+    if (!response.ok) throw new Error(`English release notes returned ${response.status}`);
+    const translations = await response.json();
+    if (!translations || typeof translations !== "object" || Array.isArray(translations)) {
+      throw new Error("Invalid English release notes format");
+    }
+    return translations;
+  } catch (error) {
+    // Release files must remain available if the translation file cannot load.
+    console.warn("English release notes could not be loaded.", error);
+    return {};
+  }
 }
 
 function firstSummary(body, fallback) {
@@ -150,16 +181,16 @@ function renderMarkdown(body) {
     }
   }
 
-  if (!container.childElementCount) container.append(createElement("p", "", "작성된 릴리스 노트가 없습니다."));
+  if (!container.childElementCount) container.append(createElement("p", "", "No release notes have been published."));
   return container;
 }
 
 function getAssetLabel(name) {
   const normalized = name.toLowerCase();
   if (normalized.includes("fast")) return "Fast Portable";
-  if (normalized.endsWith(".exe")) return "Windows 실행 파일";
-  if (normalized.endsWith(".zip")) return "압축 배포본";
-  return "배포 파일";
+  if (normalized.endsWith(".exe")) return "Windows executable";
+  if (normalized.endsWith(".zip")) return "ZIP archive";
+  return "Download file";
 }
 
 function choosePrimaryAsset(assets = []) {
@@ -174,7 +205,7 @@ function createAssetLink(asset) {
   const link = createElement("a", "asset-link");
   link.href = asset.browser_download_url;
   link.setAttribute("download", "");
-  link.setAttribute("aria-label", `${asset.name} 다운로드, ${formatBytes(asset.size)}`);
+  link.setAttribute("aria-label", `Download ${asset.name}, ${formatBytes(asset.size)}`);
 
   const icon = createElement("span", "asset-icon");
   icon.innerHTML = icons.file;
@@ -193,7 +224,7 @@ function createReleaseCard(release, index) {
   const card = createElement("article", `release-card${index === 0 ? " is-latest" : ""}`);
   card.dataset.search = cleanText(
     [release.tag_name, release.name, release.body, ...(release.assets || []).map((asset) => asset.name)].join(" "),
-  ).toLocaleLowerCase("ko-KR");
+  ).toLocaleLowerCase("en-US");
   card.style.animationDelay = `${Math.min(index * 45, 360)}ms`;
 
   const releaseIndex = createElement("div", "release-index");
@@ -211,7 +242,7 @@ function createReleaseCard(release, index) {
   date.dateTime = publishedAt || "";
   indexTop.append(date);
 
-  const sourceLink = createElement("a", "", "릴리스 원문");
+  const sourceLink = createElement("a", "", "View on GitHub");
   sourceLink.href = release.html_url;
   sourceLink.target = "_blank";
   sourceLink.rel = "noreferrer";
@@ -228,13 +259,13 @@ function createReleaseCard(release, index) {
   if (release.assets?.length) {
     release.assets.forEach((asset) => assets.append(createAssetLink(asset)));
   } else {
-    assets.append(createElement("p", "no-assets", "이 버전에 등록된 배포 파일이 없습니다."));
+    assets.append(createElement("p", "no-assets", "No download files are available for this release."));
   }
   content.append(assets);
 
   const notes = createElement("details", "release-notes");
   if (index === 0) notes.open = true;
-  notes.append(createElement("summary", "", "업데이트 노트"));
+  notes.append(createElement("summary", "", "Release notes"));
   notes.append(renderMarkdown(release.body));
   content.append(notes);
 
@@ -252,13 +283,13 @@ function renderHero(latest) {
   date.textContent = `Released ${formatDate(publishedAt)}`;
   date.dateTime = publishedAt || "";
   document.querySelector("#latest-assets").textContent = `${latest.assets?.length || 0} files`;
-  document.querySelector("#latest-meta").textContent = `${formatDate(publishedAt)} 공개 · GitHub Releases 제공`;
+  document.querySelector("#latest-meta").textContent = `Released ${formatDate(publishedAt)} · Hosted on GitHub`;
 
   const download = document.querySelector("#latest-download");
   download.classList.remove("is-disabled");
   download.removeAttribute("aria-disabled");
   download.href = primaryAsset?.browser_download_url || latest.html_url;
-  download.querySelector("span").textContent = primaryAsset ? `${latest.tag_name} 다운로드` : `${latest.tag_name} 릴리스 보기`;
+  download.querySelector("span").textContent = primaryAsset ? `Download ${latest.tag_name}` : `View ${latest.tag_name} release`;
 }
 
 function renderStats(items) {
@@ -271,11 +302,11 @@ function renderReleases(items) {
   releaseList.replaceChildren();
   items.forEach((release, index) => releaseList.append(createReleaseCard(release, index)));
   releaseList.setAttribute("aria-busy", "false");
-  resultStatus.textContent = `총 ${items.length}개 릴리스 · 최신순`;
+  resultStatus.textContent = `${items.length} releases · Newest first`;
 }
 
 function filterReleases() {
-  const query = cleanText(searchInput.value).toLocaleLowerCase("ko-KR");
+  const query = cleanText(searchInput.value).toLocaleLowerCase("en-US");
   const cards = [...releaseList.querySelectorAll(".release-card")];
   let visible = 0;
 
@@ -285,14 +316,16 @@ function filterReleases() {
     if (match) visible += 1;
   });
 
-  resultStatus.textContent = query ? `검색 결과 ${visible}개` : `총 ${releases.length}개 릴리스 · 최신순`;
+  resultStatus.textContent = query
+    ? `${visible} matching ${visible === 1 ? "release" : "releases"}`
+    : `${releases.length} releases · Newest first`;
 
   let emptyState = releaseList.querySelector(".empty-state");
   if (visible === 0) {
     if (!emptyState) {
       emptyState = createElement("div", "empty-state");
-      emptyState.append(createElement("h3", "", "일치하는 릴리스가 없습니다."));
-      emptyState.append(createElement("p", "", "다른 버전 번호나 업데이트 키워드로 검색해 보세요."));
+      emptyState.append(createElement("h3", "", "No matching releases."));
+      emptyState.append(createElement("p", "", "Try a different version number or update keyword."));
       releaseList.append(emptyState);
     }
   } else {
@@ -303,30 +336,32 @@ function filterReleases() {
 function showError() {
   releaseList.setAttribute("aria-busy", "false");
   const state = createElement("div", "error-state");
-  state.append(createElement("h3", "", "릴리스 목록을 불러오지 못했습니다."));
-  state.append(createElement("p", "", "잠시 후 다시 시도하거나 GitHub Releases에서 파일을 확인해 주세요."));
-  const link = createElement("a", "button button-dark", "GitHub Releases 열기");
+  state.append(createElement("h3", "", "Unable to load releases."));
+  state.append(createElement("p", "", "Please try again later, or download files directly from GitHub Releases."));
+  const link = createElement("a", "button button-dark", "Open GitHub Releases");
   link.href = RELEASES_URL;
   state.append(link);
   releaseList.replaceChildren(state);
-  resultStatus.textContent = "연결 오류";
-  document.querySelector("#latest-meta").textContent = "GitHub Releases에서 직접 확인해 주세요.";
+  resultStatus.textContent = "Connection error";
+  document.querySelector("#latest-meta").textContent = "Visit GitHub Releases to download the application.";
   const latestDownload = document.querySelector("#latest-download");
   latestDownload.classList.remove("is-disabled");
   latestDownload.removeAttribute("aria-disabled");
   latestDownload.href = RELEASES_URL;
-  latestDownload.querySelector("span").textContent = "GitHub Releases 열기";
+  latestDownload.querySelector("span").textContent = "Open GitHub Releases";
 }
 
 async function loadReleases() {
   try {
-    const response = await fetch(API_URL, {
-      headers: { Accept: "application/vnd.github+json" },
-    });
+    const [response, translations] = await Promise.all([
+      fetch(API_URL, { headers: { Accept: "application/vnd.github+json" } }),
+      loadEnglishNotes(),
+    ]);
     if (!response.ok) throw new Error(`GitHub API returned ${response.status}`);
     const data = await response.json();
     releases = data
       .filter((release) => !release.draft)
+      .map((release) => localizeRelease(release, translations))
       .sort((a, b) => new Date(releaseDateValue(b)) - new Date(releaseDateValue(a)));
     if (!releases.length) throw new Error("No releases found");
 

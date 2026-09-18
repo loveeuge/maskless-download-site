@@ -1,24 +1,31 @@
-# 마스크리스 다운로드 사이트
+# Maskless Download Site
 
-PLANCK MASKLESS LITHO의 버전별 릴리스 노트와 배포 파일을 제공하는 공식 다운로드 페이지입니다.
+The official download site for PLANCK MASKLESS LITHO, with English release notes and downloads for each version.
 
 ## Website
 
-[마스크리스 다운로드 사이트](https://loveeuge.github.io/maskless-download-site/)
+[Maskless Download Site](https://loveeuge.github.io/maskless-download-site/)
 
 ## How it works
 
-- 이 저장소의 GitHub Releases API에서 공개된 버전과 업데이트 노트를 자동으로 불러옵니다.
-- 모든 다운로드는 각 GitHub Release에 첨부된 원본 배포 파일을 가리킵니다.
-- 소프트웨어 소스 코드는 이 저장소에 포함하지 않습니다.
-- 로고와 브랜드 이미지는 [PLANCKLAB 공식 홈페이지](https://www.planck.co.kr/)의 자산을 사용합니다.
+- Published versions and download links are loaded from this repository's GitHub Releases API.
+- English release titles and notes are maintained in `release-notes.en.json`, keyed by the exact release tag.
+- All downloads point to the original files attached to each GitHub Release. Translations do not change release assets or the original notes on GitHub.
+- This repository contains the download website, not the instrument-control application source code.
+- Logos and brand images come from the [PLANCKLAB website](https://www.planck.co.kr/).
+
+## Updating release notes
+
+When publishing a release, add its English `name` and Markdown `body` to `release-notes.en.json`. Keep version numbers, filenames, hashes, test results, and historical behavior consistent with the original release notes.
+
+If a translation is missing, English notes from GitHub are used directly. Korean notes are replaced on the site with an English notice linking users to the original release. Downloads remain available if the translation file cannot load.
 
 ## Local preview
 
-정적 파일이므로 간단한 로컬 HTTP 서버로 확인할 수 있습니다.
+Serve the static files with a local HTTP server:
 
 ```powershell
-python -m http.server 8000
+python -m http.server 8000 --bind 127.0.0.1
 ```
 
-그다음 `http://localhost:8000`을 엽니다.
+Open `http://127.0.0.1:8000/`. An internet connection is required to load GitHub release data.
