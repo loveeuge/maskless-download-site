@@ -1,4 +1,4 @@
-import { LANGUAGE_STORAGE_KEY, LOCALES, cleanText, localizeRelease, message, resolveLanguage } from "./i18n.mjs?v=20260918-bilingual-1";
+import { LANGUAGE_STORAGE_KEY, LOCALES, cleanText, localizeRelease, message, resolveLanguage } from "./i18n.mjs?v=20260918-pc-specs-1";
 
 const REPOSITORY = "loveeuge/maskless-download-site";
 const API_URL = `https://api.github.com/repos/${REPOSITORY}/releases?per_page=100`;
@@ -106,7 +106,7 @@ function formatBytes(bytes) {
 
 async function loadEnglishNotes() {
   try {
-    const response = await fetch("release-notes.en.json?v=20260918-bilingual-1");
+    const response = await fetch("release-notes.en.json?v=20260918-pc-specs-1");
     if (!response.ok) throw new Error(`English release notes returned ${response.status}`);
     const translations = await response.json();
     if (!translations || typeof translations !== "object" || Array.isArray(translations)) {

@@ -29,6 +29,18 @@ In English mode, a missing translation falls back to English notes from GitHub o
 
 CSS, JavaScript, the language module, and English notes use versioned asset URLs. Update their matching version strings when publishing UI or translation changes to avoid using stale assets from a previous deployment.
 
+## PC specifications guide
+
+The final section, `#pc-specs`, compares minimum **planning guidelines** and recommended PC configurations in both languages. It describes the desktop application, not the browser requirements for this website.
+
+- Scope: MASKLESS LITHO **v2.1.3**. Review the version label and specifications when publishing a newer application release.
+- Suggested baseline: Windows 11 x64 on Intel/AMD, a Windows 11-compatible 4-core CPU, 8 GB RAM, and an SSD with 5 GB of free working space. Suggested recommended configuration: 6 or more cores, 16 GB RAM (32 GB for large GDS/camera workflows), and an NVMe SSD with 20 GB free. These are not benchmark-verified minimums or a performance guarantee; storage excludes the operating system and growing user data.
+- Verified software constraints in the application source at tag `v2.1.3`: `ui/dlp_display_policy.py` requires DLP output at 1920 x 1080 and 100% scaling. `ui/uv_keystone_window.py` also requires a separate main/camera monitor with matching resolution and scaling for Calibration. This is not a blanket ban on using a 4K main monitor outside Calibration.
+- Packaging and driver guidance follows the application's tagged README. Python, GDS conversion, and Motorized Focus components are bundled; hardware drivers may still need installation. Do not infer hardware validation from the website tests.
+- OS guidance references [Qt 6.9 supported platforms](https://doc.qt.io/archives/qt-6.9/supported-platforms.html) and [Microsoft Windows 11 requirements](https://www.microsoft.com/en-us/windows/windows-11-specifications). Qt compatibility alone does not certify the application, equipment drivers, or suggested CPU/RAM figures. Windows 11's own processor, firmware, and storage requirements must also be met.
+
+Copy is maintained in `i18n.mjs` with a matching Korean HTML fallback. The accessible comparison table scrolls within its container on narrow screens.
+
 ## Local preview
 
 Serve the static files with a local HTTP server:

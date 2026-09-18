@@ -554,7 +554,8 @@ svg {
 }
 
 .releases-section,
-.download-guide {
+.download-guide,
+.system-requirements {
   width: min(1180px, calc(100% - 48px));
   margin: 0 auto;
   padding: 100px 0 20px;
@@ -573,7 +574,8 @@ svg {
 }
 
 .section-heading h2,
-.download-guide h2 {
+.download-guide h2,
+.system-requirements h2 {
   margin: 0;
   font-size: clamp(31px, 4vw, 46px);
   letter-spacing: -0.045em;
@@ -994,7 +996,7 @@ svg {
 }
 
 .download-guide {
-  padding-bottom: 110px;
+  padding-bottom: 20px;
 }
 
 .download-guide > div:first-child {
@@ -1045,6 +1047,101 @@ svg {
   color: var(--muted);
   font-size: 12px;
   line-height: 1.7;
+}
+
+.system-requirements {
+  padding-bottom: 100px;
+}
+
+.specs-intro,
+.specs-footnote {
+  max-width: 900px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.specs-intro {
+  margin: 20px 0 28px;
+}
+
+.specs-scroll-hint {
+  display: none;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.specs-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--white);
+}
+
+.specs-table {
+  width: 100%;
+  min-width: 660px;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.specs-table th,
+.specs-table td {
+  padding: 19px 24px;
+  vertical-align: top;
+}
+
+.specs-table thead {
+  background: var(--ink-soft);
+  color: var(--white);
+}
+
+.specs-table th:first-child {
+  width: 22%;
+}
+
+.specs-table td {
+  width: 39%;
+}
+
+.specs-table tbody tr + tr {
+  border-top: 1px solid var(--line);
+}
+
+.specs-table td:last-child {
+  background: #f3f6ff;
+}
+
+.specs-table .specs-required-row > * {
+  background: #e9efff;
+  color: #283f85;
+  font-weight: 700;
+}
+
+.specs-notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 28px;
+}
+
+.specs-notes h3 {
+  margin: 0 0 9px;
+  font-size: 16px;
+}
+
+.specs-notes p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.specs-footnote {
+  margin: 26px 0 0;
+  font-size: 12px;
 }
 
 .site-footer {
@@ -1158,7 +1255,8 @@ svg {
 
   .summary-strip,
   .releases-section,
-  .download-guide {
+  .download-guide,
+  .system-requirements {
     width: min(100% - 32px, 1180px);
   }
 
@@ -1227,6 +1325,25 @@ svg {
 
   .guide-grid {
     grid-template-columns: 1fr;
+  }
+
+  .system-requirements {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+
+  .specs-scroll-hint {
+    display: block;
+  }
+
+  .specs-table th,
+  .specs-table td {
+    padding: 15px 16px;
+  }
+
+  .specs-notes {
+    grid-template-columns: 1fr;
+    gap: 22px;
   }
 
   .site-footer {

@@ -43,6 +43,26 @@ test("the headline uses the requested two lines in each language", () => {
   assert.equal(message("en", "headingSecond"), "Download");
 });
 
+test("PC specifications remain the final section with localized, accessible comparison rows", () => {
+  const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+  const section = html.match(/<section class="system-requirements"[\s\S]*?<\/section>/)?.[0];
+  assert.ok(section);
+  assert.match(html, /<\/section>\s*<\/main>/);
+  assert.ok(html.indexOf(section) > html.indexOf('class="download-guide"'));
+  assert.equal((section.match(/scope="col"/g) || []).length, 3);
+  assert.equal((section.match(/scope="row"/g) || []).length, 8);
+  assert.match(section, /<caption/);
+  for (const [, key, fallback] of section.matchAll(/data-i18n="(\w+)">([^<]*)</g)) {
+    assert.equal(fallback, message("ko", key), key);
+    assert.doesNotMatch(message("en", key), /[가-힣]/, key);
+  }
+  assert.match(message("en", "specsIntro"), /not benchmark-verified minimums/);
+  for (const language of ["ko", "en"]) {
+    assert.match(message(language, "specsDlpValue"), /1920 × 1080.*100%/);
+    assert.match(message(language, "specsMainMin"), /Keystone Calibration.*1920 × 1080.*100%/);
+  }
+});
+
 test("search and download labels interpolate values without losing zero counts", () => {
   assert.equal(message("en", "matchedOne", { count: 1 }), "1 matching release");
   assert.equal(message("ko", "matchedMany", { count: 0 }), "검색 결과 0개");
