@@ -1,3 +1,5 @@
+import { LANGUAGE_STORAGE_KEY, LOCALES, cleanText, localizeRelease, message, resolveLanguage } from "./i18n.mjs?v=20260918-bilingual-1";
+
 const REPOSITORY = "loveeuge/maskless-download-site";
 const API_URL = `https://api.github.com/repos/${REPOSITORY}/releases?per_page=100`;
 const RELEASES_URL = `https://github.com/${REPOSITORY}/releases`;
@@ -29,6 +31,50 @@ const icons = {
 };
 
 let releases = [];
+let originalReleases = [];
+let englishNotes = {};
+let loadState = "loading";
+let storedLanguage = null;
+try {
+  storedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+} catch {
+  // Language switching also works when browser storage is disabled.
+}
+let currentLanguage = resolveLanguage(new URL(location.href).searchParams.get("lang"), storedLanguage);
+
+function t(key, values) {
+  return message(currentLanguage, key, values);
+}
+
+function applyLanguage() {
+  document.documentElement.lang = currentLanguage;
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    element.textContent = t(element.dataset.i18n);
+  });
+  for (const attribute of ["aria-label", "placeholder", "content"]) {
+    document.querySelectorAll(`[data-i18n-${attribute}]`).forEach((element) => {
+      element.setAttribute(attribute, t(element.getAttribute(`data-i18n-${attribute}`)));
+    });
+  }
+  document.querySelectorAll("[data-language]").forEach((button) => {
+    button.setAttribute("aria-pressed", String(button.dataset.language === currentLanguage));
+  });
+  if (loadState === "ready") renderReadyState();
+  else if (loadState === "error") showError();
+}
+
+function setLanguage(language) {
+  currentLanguage = resolveLanguage(language, null);
+  try {
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, currentLanguage);
+  } catch {
+    // The URL preserves the selected language when storage is unavailable.
+  }
+  const url = new URL(location.href);
+  url.searchParams.set("lang", currentLanguage);
+  history.replaceState(history.state, "", url);
+  applyLanguage();
+}
 
 function createElement(tag, className, text) {
   const element = document.createElement(tag);
@@ -38,8 +84,8 @@ function createElement(tag, className, text) {
 }
 
 function formatDate(value) {
-  if (!value) return "Date unavailable";
-  return new Intl.DateTimeFormat("en-US", {
+  if (!value) return t("dateUnavailable");
+  return new Intl.DateTimeFormat(LOCALES[currentLanguage], {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -51,35 +97,16 @@ function releaseDateValue(release) {
 }
 
 function formatBytes(bytes) {
-  if (!Number.isFinite(bytes) || bytes <= 0) return "Size unavailable";
+  if (!Number.isFinite(bytes) || bytes <= 0) return t("sizeUnavailable");
   const units = ["B", "KB", "MB", "GB"];
   const index = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
   const value = bytes / 1024 ** index;
   return `${value.toFixed(index >= 2 ? 1 : 0)} ${units[index]}`;
 }
 
-function cleanText(text = "") {
-  return text.replace(/^\uFEFF/, "").replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "").trim();
-}
-
-function localizeRelease(release, translations) {
-  const translated = translations[release.tag_name];
-  const hasKorean = (text) => /[\u1100-\u11FF\u3130-\u318F\uAC00-\uD7AF]/.test(text || "");
-  const englishText = (text) => typeof text === "string" && !hasKorean(text) ? cleanText(text) : "";
-  const originalName = cleanText(release.name || "");
-  const originalBody = cleanText(release.body || "");
-  return {
-    ...release,
-    name: englishText(translated?.name) || englishText(originalName) || `MASKLESS LITHO ${release.tag_name}`,
-    body: englishText(translated?.body) || (hasKorean(originalBody)
-      ? "English release notes are not available yet. Use the View on GitHub link to read the original notes."
-      : originalBody),
-  };
-}
-
 async function loadEnglishNotes() {
   try {
-    const response = await fetch("release-notes.en.json");
+    const response = await fetch("release-notes.en.json?v=20260918-bilingual-1");
     if (!response.ok) throw new Error(`English release notes returned ${response.status}`);
     const translations = await response.json();
     if (!translations || typeof translations !== "object" || Array.isArray(translations)) {
@@ -181,16 +208,16 @@ function renderMarkdown(body) {
     }
   }
 
-  if (!container.childElementCount) container.append(createElement("p", "", "No release notes have been published."));
+  if (!container.childElementCount) container.append(createElement("p", "", t("emptyNotes")));
   return container;
 }
 
 function getAssetLabel(name) {
   const normalized = name.toLowerCase();
-  if (normalized.includes("fast")) return "Fast Portable";
-  if (normalized.endsWith(".exe")) return "Windows executable";
-  if (normalized.endsWith(".zip")) return "ZIP archive";
-  return "Download file";
+  if (normalized.includes("fast")) return t("fastPortable");
+  if (normalized.endsWith(".exe")) return t("windowsExecutable");
+  if (normalized.endsWith(".zip")) return t("zipArchive");
+  return t("downloadFile");
 }
 
 function choosePrimaryAsset(assets = []) {
@@ -205,7 +232,7 @@ function createAssetLink(asset) {
   const link = createElement("a", "asset-link");
   link.href = asset.browser_download_url;
   link.setAttribute("download", "");
-  link.setAttribute("aria-label", `Download ${asset.name}, ${formatBytes(asset.size)}`);
+  link.setAttribute("aria-label", t("assetDownloadLabel", { name: asset.name, size: formatBytes(asset.size) }));
 
   const icon = createElement("span", "asset-icon");
   icon.innerHTML = icons.file;
@@ -220,20 +247,21 @@ function createAssetLink(asset) {
   return link;
 }
 
-function createReleaseCard(release, index) {
+function createReleaseCard(release, index, expanded) {
   const card = createElement("article", `release-card${index === 0 ? " is-latest" : ""}`);
+  card.dataset.tag = release.tag_name;
   card.dataset.search = cleanText(
     [release.tag_name, release.name, release.body, ...(release.assets || []).map((asset) => asset.name)].join(" "),
-  ).toLocaleLowerCase("en-US");
+  ).toLocaleLowerCase(LOCALES[currentLanguage]);
   card.style.animationDelay = `${Math.min(index * 45, 360)}ms`;
 
   const releaseIndex = createElement("div", "release-index");
   const indexTop = createElement("div");
   const badges = createElement("div", "release-badges");
-  badges.append(createElement("span", "release-badge", "STABLE"));
-  if (index === 0) badges.append(createElement("span", "release-badge latest", "LATEST"));
-  if (release.prerelease || /beta/i.test(`${release.name} ${release.tag_name}`)) {
-    badges.append(createElement("span", "release-badge beta", "BETA"));
+  badges.append(createElement("span", "release-badge", t("stableBadge")));
+  if (index === 0) badges.append(createElement("span", "release-badge latest", t("latestBadge")));
+  if (release.prerelease || /beta|베타/i.test(`${release.name} ${release.tag_name}`)) {
+    badges.append(createElement("span", "release-badge beta", t("betaBadge")));
   }
   indexTop.append(badges);
   indexTop.append(createElement("p", "release-version", release.tag_name));
@@ -242,7 +270,7 @@ function createReleaseCard(release, index) {
   date.dateTime = publishedAt || "";
   indexTop.append(date);
 
-  const sourceLink = createElement("a", "", "View on GitHub");
+  const sourceLink = createElement("a", "", t("viewOnGithub"));
   sourceLink.href = release.html_url;
   sourceLink.target = "_blank";
   sourceLink.rel = "noreferrer";
@@ -252,20 +280,20 @@ function createReleaseCard(release, index) {
   const content = createElement("div", "release-content");
   const titleRow = createElement("div", "release-title-row");
   titleRow.append(createElement("h3", "", cleanText(release.name) || release.tag_name));
-  titleRow.append(createElement("span", "asset-count", `${release.assets?.length || 0} FILES`));
+  titleRow.append(createElement("span", "asset-count", t("fileCount", { count: release.assets?.length || 0 })));
   content.append(titleRow);
 
   const assets = createElement("div", "asset-list");
   if (release.assets?.length) {
     release.assets.forEach((asset) => assets.append(createAssetLink(asset)));
   } else {
-    assets.append(createElement("p", "no-assets", "No download files are available for this release."));
+    assets.append(createElement("p", "no-assets", t("noFiles")));
   }
   content.append(assets);
 
   const notes = createElement("details", "release-notes");
-  if (index === 0) notes.open = true;
-  notes.append(createElement("summary", "", "Release notes"));
+  notes.open = expanded.has(release.tag_name) ? expanded.get(release.tag_name) : index === 0;
+  notes.append(createElement("summary", "", t("releaseNotes")));
   notes.append(renderMarkdown(release.body));
   content.append(notes);
 
@@ -280,16 +308,16 @@ function renderHero(latest) {
   document.querySelector("#latest-panel-title").textContent = firstSummary(latest.body, latest.name);
 
   const date = document.querySelector("#latest-date");
-  date.textContent = `Released ${formatDate(publishedAt)}`;
+  date.textContent = t("releasedDate", { date: formatDate(publishedAt) });
   date.dateTime = publishedAt || "";
-  document.querySelector("#latest-assets").textContent = `${latest.assets?.length || 0} files`;
-  document.querySelector("#latest-meta").textContent = `Released ${formatDate(publishedAt)} · Hosted on GitHub`;
+  document.querySelector("#latest-assets").textContent = t("fileCount", { count: latest.assets?.length || 0 });
+  document.querySelector("#latest-meta").textContent = t("releasedMeta", { date: formatDate(publishedAt) });
 
   const download = document.querySelector("#latest-download");
   download.classList.remove("is-disabled");
   download.removeAttribute("aria-disabled");
   download.href = primaryAsset?.browser_download_url || latest.html_url;
-  download.querySelector("span").textContent = primaryAsset ? `Download ${latest.tag_name}` : `View ${latest.tag_name} release`;
+  download.querySelector("span").textContent = t(primaryAsset ? "downloadVersion" : "viewRelease", { version: latest.tag_name });
 }
 
 function renderStats(items) {
@@ -299,14 +327,26 @@ function renderStats(items) {
 }
 
 function renderReleases(items) {
+  const expanded = new Map([...releaseList.querySelectorAll(".release-card")].map((card) => [
+    card.dataset.tag, card.querySelector(".release-notes").open,
+  ]));
   releaseList.replaceChildren();
-  items.forEach((release, index) => releaseList.append(createReleaseCard(release, index)));
+  items.forEach((release, index) => releaseList.append(createReleaseCard(release, index, expanded)));
   releaseList.setAttribute("aria-busy", "false");
-  resultStatus.textContent = `${items.length} releases · Newest first`;
+  resultStatus.textContent = t("releaseCount", { count: items.length });
+}
+
+function renderReadyState() {
+  releases = originalReleases.map((release) => localizeRelease(release, englishNotes, currentLanguage));
+  renderHero(releases[0]);
+  renderStats(releases);
+  renderReleases(releases);
+  filterReleases();
 }
 
 function filterReleases() {
-  const query = cleanText(searchInput.value).toLocaleLowerCase("en-US");
+  if (loadState !== "ready") return;
+  const query = cleanText(searchInput.value).toLocaleLowerCase(LOCALES[currentLanguage]);
   const cards = [...releaseList.querySelectorAll(".release-card")];
   let visible = 0;
 
@@ -317,15 +357,15 @@ function filterReleases() {
   });
 
   resultStatus.textContent = query
-    ? `${visible} matching ${visible === 1 ? "release" : "releases"}`
-    : `${releases.length} releases · Newest first`;
+    ? t(visible === 1 ? "matchedOne" : "matchedMany", { count: visible })
+    : t("releaseCount", { count: releases.length });
 
   let emptyState = releaseList.querySelector(".empty-state");
   if (visible === 0) {
     if (!emptyState) {
       emptyState = createElement("div", "empty-state");
-      emptyState.append(createElement("h3", "", "No matching releases."));
-      emptyState.append(createElement("p", "", "Try a different version number or update keyword."));
+      emptyState.append(createElement("h3", "", t("noMatches")));
+      emptyState.append(createElement("p", "", t("noMatchesHelp")));
       releaseList.append(emptyState);
     }
   } else {
@@ -336,19 +376,20 @@ function filterReleases() {
 function showError() {
   releaseList.setAttribute("aria-busy", "false");
   const state = createElement("div", "error-state");
-  state.append(createElement("h3", "", "Unable to load releases."));
-  state.append(createElement("p", "", "Please try again later, or download files directly from GitHub Releases."));
-  const link = createElement("a", "button button-dark", "Open GitHub Releases");
+  state.append(createElement("h3", "", t("unableLoad")));
+  state.append(createElement("p", "", t("retryHelp")));
+  const link = createElement("a", "button button-dark", t("openGithub"));
   link.href = RELEASES_URL;
   state.append(link);
   releaseList.replaceChildren(state);
-  resultStatus.textContent = "Connection error";
-  document.querySelector("#latest-meta").textContent = "Visit GitHub Releases to download the application.";
+  resultStatus.textContent = t("connectionError");
+  document.querySelector("#latest-meta").textContent = t("visitGithub");
+  document.querySelector("#latest-panel-title").textContent = t("unableLoad");
   const latestDownload = document.querySelector("#latest-download");
   latestDownload.classList.remove("is-disabled");
   latestDownload.removeAttribute("aria-disabled");
   latestDownload.href = RELEASES_URL;
-  latestDownload.querySelector("span").textContent = "Open GitHub Releases";
+  latestDownload.querySelector("span").textContent = t("openGithub");
 }
 
 async function loadReleases() {
@@ -359,20 +400,24 @@ async function loadReleases() {
     ]);
     if (!response.ok) throw new Error(`GitHub API returned ${response.status}`);
     const data = await response.json();
-    releases = data
+    originalReleases = data
       .filter((release) => !release.draft)
-      .map((release) => localizeRelease(release, translations))
       .sort((a, b) => new Date(releaseDateValue(b)) - new Date(releaseDateValue(a)));
-    if (!releases.length) throw new Error("No releases found");
+    if (!originalReleases.length) throw new Error("No releases found");
 
-    renderHero(releases[0]);
-    renderStats(releases);
-    renderReleases(releases);
+    englishNotes = translations;
+    loadState = "ready";
+    renderReadyState();
   } catch (error) {
     console.error(error);
+    loadState = "error";
     showError();
   }
 }
 
 searchInput.addEventListener("input", filterReleases);
+document.querySelectorAll("[data-language]").forEach((button) => {
+  button.addEventListener("click", () => setLanguage(button.dataset.language));
+});
+applyLanguage();
 loadReleases();

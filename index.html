@@ -1,39 +1,46 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Download the latest and previous versions of PLANCK MASKLESS LITHO, with release notes and portable builds in one place."
+      data-i18n-content="metaDescription"
+      content="PLANCK MASKLESS LITHO 최신 버전과 이전 버전, 업데이트 내용, 포터블 빌드를 확인하고 다운로드하세요."
     />
     <meta name="theme-color" content="#07141c" />
-    <meta property="og:title" content="Maskless Download Site | PLANCK MASKLESS LITHO" />
+    <meta property="og:title" data-i18n-content="pageTitle" content="마스크리스 SW 다운로드 | PLANCK MASKLESS LITHO" />
     <meta
       property="og:description"
-      content="Explore MASKLESS LITHO releases, read what's new, and download the build that fits your workflow."
+      data-i18n-content="ogDescription"
+      content="마스크리스 SW의 버전별 업데이트와 다운로드 파일을 한곳에서 확인하세요."
     />
     <meta property="og:type" content="website" />
     <meta
       property="og:image"
       content="https://loveeuge.github.io/maskless-download-site/assets/plancklab-hero.jpg"
     />
-    <title>Maskless Download Site | PLANCK MASKLESS LITHO</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script src="script.js" defer></script>
+    <title data-i18n="pageTitle">마스크리스 SW 다운로드 | PLANCK MASKLESS LITHO</title>
+    <link rel="stylesheet" href="styles.css?v=20260918-bilingual-1" />
+    <script src="script.js?v=20260918-bilingual-1" type="module"></script>
   </head>
   <body>
-    <a class="skip-link" href="#releases">Skip to releases</a>
+    <a class="skip-link" href="#releases" data-i18n="skipLink">릴리즈 목록으로 건너뛰기</a>
 
     <header class="site-header">
-      <a class="brand" href="#top" aria-label="Maskless Download Site home">
+      <a class="brand" href="#top" data-i18n-aria-label="homeLabel" aria-label="마스크리스 SW 다운로드 홈">
         <img class="brand-logo" src="assets/plancklab-logo.png" alt="PLANCKLAB Beyond Microscale Resolution" />
       </a>
 
-      <nav class="top-nav" aria-label="Main navigation">
-        <a href="#latest">Latest release</a>
-        <a href="#releases">All releases</a>
-        <a href="https://www.planck.co.kr/" target="_blank" rel="noreferrer">Company website</a>
+      <div class="header-actions">
+      <div class="language-switch" role="group" data-i18n-aria-label="languageLabel" aria-label="사이트 언어 선택">
+        <button type="button" data-language="ko" lang="ko" aria-pressed="true">한글 사이트</button>
+        <button type="button" data-language="en" lang="en" aria-pressed="false">English Site</button>
+      </div>
+      <nav class="top-nav" data-i18n-aria-label="mainNavigation" aria-label="주요 메뉴">
+        <a href="#latest" data-i18n="latestReleaseNav">최신 버전</a>
+        <a href="#releases" data-i18n="allReleasesNav">모든 버전</a>
+        <a href="https://www.planck.co.kr/" target="_blank" rel="noreferrer" data-i18n="companyWebsite">회사 홈페이지</a>
         <a
           class="nav-github"
           href="https://github.com/loveeuge/maskless-download-site"
@@ -46,20 +53,20 @@
           </svg>
         </a>
       </nav>
+      </div>
     </header>
 
     <main id="top">
       <section class="hero" id="latest">
         <div class="hero-grid" aria-hidden="true"></div>
         <div class="hero-copy">
-          <p class="eyebrow"><span></span> PLANCKLAB · OFFICIAL DOWNLOADS</p>
+          <p class="eyebrow"><span></span><b data-i18n="eyebrow">PLANCKLAB · 공식 다운로드</b></p>
           <h1>
-            Maskless<br />
-            <em>Download Site</em>
+            <span data-i18n="headingFirst">마스크리스 SW</span><br />
+            <em data-i18n="headingSecond">다운로드</em>
           </h1>
-          <p class="hero-description">
-            The official download site for PLANCK MASKLESS LITHO.
-            Get the latest build and explore updates from every release.
+          <p class="hero-description" data-i18n="heroDescription">
+            PLANCK MASKLESS LITHO의 공식 다운로드 페이지입니다. 최신 빌드와 버전별 업데이트를 확인하고 다운로드하세요.
           </p>
 
           <div class="hero-actions">
@@ -67,39 +74,39 @@
               <svg viewBox="0 0 20 20" aria-hidden="true">
                 <path d="M10 3v9m0 0 4-4m-4 4L6 8M4 16h12" />
               </svg>
-              <span>Loading latest release</span>
+              <span data-i18n="loadingLatest">최신 버전 불러오는 중</span>
             </a>
-            <a class="button button-ghost" href="#releases">Browse release history</a>
+            <a class="button button-ghost" href="#releases" data-i18n="browseHistory">버전 기록 보기</a>
           </div>
 
-          <p class="hero-meta" id="latest-meta" aria-live="polite">Fetching release information from GitHub.</p>
+          <p class="hero-meta" id="latest-meta" aria-live="polite" data-i18n="fetchingReleases">GitHub에서 릴리즈 정보를 확인하고 있습니다.</p>
         </div>
 
         <aside class="latest-panel" aria-labelledby="latest-panel-title">
           <div class="panel-topline">
-            <span>LATEST RELEASE</span>
-            <span class="live-indicator"><i></i> STABLE</span>
+            <span data-i18n="latestReleaseLabel">최신 릴리즈</span>
+            <span class="live-indicator"><i></i><b data-i18n="stableBadge">안정</b></span>
           </div>
           <div class="version-display">
-            <span>VERSION</span>
+            <span data-i18n="versionLabel">버전</span>
             <strong id="latest-version">—</strong>
           </div>
           <div class="release-brief">
-            <p id="latest-panel-title">Loading the latest release information.</p>
+            <p id="latest-panel-title" data-i18n="loadingDetails">최신 릴리즈 정보를 불러오고 있습니다.</p>
             <time id="latest-date" datetime="">—</time>
           </div>
           <dl class="quick-stats">
             <div>
-              <dt>Files</dt>
+              <dt data-i18n="filesLabel">배포 파일</dt>
               <dd id="latest-assets">—</dd>
             </div>
             <div>
-              <dt>Supported OS</dt>
+              <dt data-i18n="osLabel">지원 OS</dt>
               <dd>Windows</dd>
             </div>
             <div>
-              <dt>Channel</dt>
-              <dd>Stable</dd>
+              <dt data-i18n="channelLabel">채널</dt>
+              <dd data-i18n="stableLabel">안정 버전</dd>
             </div>
           </dl>
           <svg class="panel-decoration" viewBox="0 0 240 80" preserveAspectRatio="none" aria-hidden="true">
@@ -109,53 +116,53 @@
         </aside>
       </section>
 
-      <section class="summary-strip" aria-label="Release summary">
+      <section class="summary-strip" data-i18n-aria-label="releaseSummary" aria-label="릴리즈 요약">
         <div>
           <strong id="stat-latest">—</strong>
-          <span>Latest version</span>
+          <span data-i18n="latestVersionLabel">최신 버전</span>
         </div>
         <div>
           <strong id="stat-releases">—</strong>
-          <span>Release history</span>
+          <span data-i18n="releaseHistoryLabel">릴리즈 기록</span>
         </div>
         <div>
           <strong id="stat-files">—</strong>
-          <span>Download files</span>
+          <span data-i18n="downloadFilesLabel">다운로드 파일</span>
         </div>
         <div class="verified-copy">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="m12 3 7 3v5c0 4.6-2.9 8-7 10-4.1-2-7-5.4-7-10V6l7-3Z" />
             <path d="m9 12 2 2 4-4" />
           </svg>
-          <span><strong>GitHub hosted</strong>Original release files</span>
+          <span><strong data-i18n="githubHosted">GitHub에서 제공</strong><span data-i18n="originalFiles">원본 릴리즈 파일 제공</span></span>
         </div>
       </section>
 
       <section class="releases-section" id="releases">
         <div class="section-heading">
           <div>
-            <p class="section-kicker">RELEASE ARCHIVE</p>
-            <h2>Download all versions</h2>
-            <p>Read what's changed and choose the right build for your setup.</p>
+            <p class="section-kicker" data-i18n="releaseArchive">릴리즈 기록</p>
+            <h2 data-i18n="downloadAllVersions">모든 버전 다운로드</h2>
+            <p data-i18n="releaseIntro">버전별 변경 사항을 확인하고 환경에 맞는 파일을 선택하세요.</p>
           </div>
           <label class="search-box" for="release-search">
             <svg viewBox="0 0 20 20" aria-hidden="true">
               <circle cx="9" cy="9" r="5" />
               <path d="m13 13 4 4" />
             </svg>
-            <span class="sr-only">Search releases</span>
-            <input id="release-search" type="search" placeholder="Search versions or updates" autocomplete="off" />
+            <span class="sr-only" data-i18n="searchLabel">릴리즈 검색</span>
+            <input id="release-search" type="search" data-i18n-placeholder="searchPlaceholder" placeholder="버전 또는 업데이트 검색" autocomplete="off" />
           </label>
         </div>
 
         <div class="result-bar">
-          <p id="result-status" aria-live="polite">Loading releases.</p>
+          <p id="result-status" aria-live="polite" data-i18n="loadingReleases">릴리즈 목록을 불러오는 중입니다.</p>
           <a
             href="https://github.com/loveeuge/maskless-download-site/releases"
             target="_blank"
             rel="noreferrer"
           >
-            View all on GitHub
+            <span data-i18n="viewAllGithub">GitHub에서 전체 보기</span>
             <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 14 14 6M8 6h6v6" /></svg>
           </a>
         </div>
@@ -168,33 +175,33 @@
 
         <noscript>
           <div class="error-state">
-            <h3>JavaScript is required.</h3>
-            <p>Enable JavaScript to browse releases, or download files directly from GitHub Releases.</p>
-            <a class="button button-dark" href="https://github.com/loveeuge/maskless-download-site/releases">Open GitHub Releases</a>
+            <h3>JavaScript가 필요합니다. / JavaScript is required.</h3>
+            <p>GitHub Releases에서 직접 다운로드하세요. / Download files directly from GitHub Releases.</p>
+            <a class="button button-dark" href="https://github.com/loveeuge/maskless-download-site/releases">GitHub Releases</a>
           </div>
         </noscript>
       </section>
 
       <section class="download-guide" aria-labelledby="guide-title">
         <div>
-          <p class="section-kicker">DOWNLOAD GUIDE</p>
-          <h2 id="guide-title">Which download should I choose?</h2>
+          <p class="section-kicker" data-i18n="downloadGuide">다운로드 안내</p>
+          <h2 id="guide-title" data-i18n="whichDownload">어떤 파일을 받아야 하나요?</h2>
         </div>
         <div class="guide-grid">
           <article>
             <span class="file-type">.EXE</span>
-            <h3>Single executable</h3>
-            <p>Run the application directly. No installer is required.</p>
+            <h3 data-i18n="singleExe">단일 실행 파일</h3>
+            <p data-i18n="singleExeHelp">설치 과정 없이 바로 실행하는 기본 배포 파일입니다.</p>
           </article>
           <article>
             <span class="file-type">.ZIP</span>
-            <h3>ZIP archive</h3>
-            <p>The single executable in a ZIP archive for convenient storage and sharing.</p>
+            <h3 data-i18n="zipArchive">압축 배포본</h3>
+            <p data-i18n="zipHelp">단일 실행 파일을 압축한 보관·전달용 패키지입니다.</p>
           </article>
           <article>
             <span class="file-type">FAST</span>
-            <h3>Fast Portable</h3>
-            <p>Extract the entire folder and run the application inside for faster startup.</p>
+            <h3 data-i18n="fastPortable">Fast Portable</h3>
+            <p data-i18n="fastHelp">폴더 전체를 압축 해제한 뒤 내부 실행 파일을 실행하면 더 빠르게 시작할 수 있습니다.</p>
           </article>
         </div>
       </section>
@@ -204,8 +211,8 @@
       <div class="footer-brand">
         <img class="footer-logo" src="assets/plancklab-logo.png" alt="PLANCKLAB" />
       </div>
-      <p>Release files are distributed through GitHub Releases.</p>
-      <a href="https://github.com/loveeuge/maskless-download-site" target="_blank" rel="noreferrer">Repository</a>
+      <p data-i18n="footerText">배포 파일은 GitHub Releases를 통해 제공됩니다.</p>
+      <a href="https://github.com/loveeuge/maskless-download-site" target="_blank" rel="noreferrer" data-i18n="repositoryLabel">저장소</a>
     </footer>
   </body>
 </html>
