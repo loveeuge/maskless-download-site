@@ -1,4 +1,4 @@
-const REPOSITORY = "loveeuge/PLANCK-MASKLESS-SW";
+const REPOSITORY = "loveeuge/maskless-download-site";
 const API_URL = `https://api.github.com/repos/${REPOSITORY}/releases?per_page=100`;
 const RELEASES_URL = `https://github.com/${REPOSITORY}/releases`;
 const ORIGINAL_DATES = {

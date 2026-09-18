@@ -1,10 +1,10 @@
-# PLANCK MASKLESS LITHO Software Download
+# 마스크리스 다운로드 사이트
 
 PLANCK MASKLESS LITHO의 버전별 릴리스 노트와 배포 파일을 제공하는 공식 다운로드 페이지입니다.
 
 ## Website
 
-[https://loveeuge.github.io/PLANCK-MASKLESS-SW/](https://loveeuge.github.io/PLANCK-MASKLESS-SW/)
+[마스크리스 다운로드 사이트](https://loveeuge.github.io/maskless-download-site/)
 
 ## How it works
 
