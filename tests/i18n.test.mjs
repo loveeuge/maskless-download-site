@@ -65,6 +65,29 @@ test("v2.1.4 notes and current setup distinguish standard edition from historica
   assert.match(notes["v2.1.3"].body, /Include Focus v0.1.1/);
 });
 
+test("v2.1.5 notes retain download names and first-ON safety qualifications", () => {
+  const notes = JSON.parse(readFileSync(new URL("../release-notes.en.json", import.meta.url), "utf8"));
+  const latest = notes["v2.1.5"];
+  assert.equal(latest.name, "MASKLESS LITHO v2.1.5");
+  for (const name of ["maskless_v2_1_5.exe", "maskless_v2_1_5.zip", "maskless_v2_1_5_fast.zip", "SHA256SUMS.txt"]) {
+    assert.ok(latest.body.includes(name), name);
+  }
+  assert.match(latest.body, /915 tests and 93 subtests passed/);
+  assert.match(latest.body, /Pattern visible/);
+  assert.match(latest.body, /not automatic optical detection/);
+  assert.match(latest.body, /light may already be on before confirmation/);
+  assert.match(latest.body, /30 seconds/);
+  assert.match(latest.body, /not a hardware-level elimination/);
+  assert.match(latest.body, /Native DLL calls are synchronous/);
+  assert.match(message("ko", "specsSetupNote"), /v2\.1\.5/);
+  assert.match(message("en", "specsSetupNote"), /v2\.1\.5/);
+  const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+  const script = readFileSync(new URL("../script.js", import.meta.url), "utf8");
+  assert.match(html, /MASKLESS LITHO v2\.1\.5/);
+  assert.match(script, /"v2\.1\.5": "2026-09-23T07:47:53Z"/);
+  assert.doesNotMatch(html + script, /20260918-v214-1/);
+});
+
 test("PC specifications remain the final section with localized, accessible comparison rows", () => {
   const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
   const section = html.match(/<section class="system-requirements"[\s\S]*?<\/section>/)?.[0];
