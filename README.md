@@ -16,6 +16,7 @@ The two-line heading is `마스크리스 SW` / `다운로드` in Korean and `Mas
 ## How it works
 
 - Published versions and download links are loaded from this repository's GitHub Releases API.
+- If the newest release reports no files, the site makes at most one additional request to that release's assets endpoint, with an 8-second timeout. This handles GitHub summaries lagging behind newly published assets; on failure, the release-page fallback link remains usable. Existing releases and language changes do not trigger extra asset requests.
 - Korean displays the original GitHub release titles and notes. English translations are maintained in `release-notes.en.json`, keyed by the exact release tag.
 - All downloads point to the original files attached to each GitHub Release. Translations do not change release assets or the original notes on GitHub.
 - This repository contains the download website, not the instrument-control application source code.
@@ -28,7 +29,7 @@ When publishing a release, add its English `name` and Markdown `body` to `releas
 
 In English mode, a missing translation falls back to English notes from GitHub or an English notice linking to the original release. Korean mode continues to show the original notes. Downloads remain available if the translation file cannot load.
 
-CSS, JavaScript, the language module, and English notes use versioned asset URLs. Update their matching version strings when publishing UI or translation changes to avoid using stale assets from a previous deployment.
+CSS, JavaScript, the language and release-data modules, and English notes use versioned asset URLs. Update their matching version strings when publishing UI or translation changes to avoid using stale assets from a previous deployment.
 
 ### v2.1.5 distribution
 
@@ -63,5 +64,5 @@ Open `http://127.0.0.1:8000/`. An internet connection is required to load GitHub
 ## Tests
 
 ```powershell
-node --test tests/i18n.test.mjs
+node --test tests/i18n.test.mjs tests/release-data.test.mjs
 ```

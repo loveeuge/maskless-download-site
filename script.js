@@ -1,4 +1,5 @@
-import { LANGUAGE_STORAGE_KEY, LOCALES, cleanText, localizeRelease, message, resolveLanguage } from "./i18n.mjs?v=20260923-v215-1";
+import { LANGUAGE_STORAGE_KEY, LOCALES, cleanText, localizeRelease, message, resolveLanguage } from "./i18n.mjs?v=20260923-v215-2";
+import { recoverLatestReleaseAssets } from "./release-data.mjs?v=20260923-v215-2";
 
 const REPOSITORY = "loveeuge/maskless-download-site";
 const API_URL = `https://api.github.com/repos/${REPOSITORY}/releases?per_page=100`;
@@ -108,7 +109,7 @@ function formatBytes(bytes) {
 
 async function loadEnglishNotes() {
   try {
-    const response = await fetch("release-notes.en.json?v=20260923-v215-1");
+    const response = await fetch("release-notes.en.json?v=20260923-v215-2");
     if (!response.ok) throw new Error(`English release notes returned ${response.status}`);
     const translations = await response.json();
     if (!translations || typeof translations !== "object" || Array.isArray(translations)) {
@@ -407,6 +408,21 @@ async function loadReleases() {
       .filter((release) => !release.draft)
       .sort((a, b) => new Date(releaseDateValue(b)) - new Date(releaseDateValue(a)));
     if (!originalReleases.length) throw new Error("No releases found");
+
+    originalReleases = await recoverLatestReleaseAssets(originalReleases, async (releaseId) => {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
+      try {
+        const assetsResponse = await fetch(
+          `https://api.github.com/repos/${REPOSITORY}/releases/${releaseId}/assets?per_page=100`,
+          { headers: { Accept: "application/vnd.github+json" }, signal: controller.signal },
+        );
+        if (!assetsResponse.ok) throw new Error(`Release assets API returned ${assetsResponse.status}`);
+        return await assetsResponse.json();
+      } finally {
+        clearTimeout(timeout);
+      }
+    });
 
     englishNotes = translations;
     loadState = "ready";
