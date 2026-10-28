@@ -18,7 +18,7 @@ The two-line heading is `마스크리스 SW` / `다운로드` in Korean and `Mas
 - Published versions and download links are loaded from this repository's GitHub Releases API.
 - If the newest release reports no files, the site makes at most one additional request to that release's assets endpoint, with an 8-second timeout. This handles GitHub summaries lagging behind newly published assets; on failure, the release-page fallback link remains usable. Existing releases and language changes do not trigger extra asset requests.
 - Korean displays the original GitHub release titles and notes. English translations are maintained in `release-notes.en.json`, keyed by the exact release tag.
-- All downloads point to the original files attached to each GitHub Release. Translations do not change release assets or the original notes on GitHub.
+- Application downloads point to the original files attached to each GitHub Release. Manual PDFs are served as static files from `downloads/`. Translations do not change release assets or the original notes on GitHub.
 - This repository contains the download website, not the instrument-control application source code.
 - The header GitHub button and footer repository link are intentionally omitted. Release details and download links remain available.
 - Logos and brand images come from the [PLANCKLAB website](https://www.planck.co.kr/).
@@ -51,6 +51,33 @@ The final section, `#pc-specs`, compares minimum **planning guidelines** and rec
 
 Copy is maintained in `i18n.mjs` with a matching Korean HTML fallback. The accessible comparison table scrolls within its container on narrow screens.
 
+## Operator manual PDFs
+
+The `#manuals` section and hero shortcut offer Korean and English **v2.1.5 Standard Edition** manuals. Both are 32-page searchable A4 PDFs, updated 2026-10-28, with embedded Korean fonts, a clickable contents page, chapter/tab bookmarks, and screenshots. All 24 sections, 27 tabs (including hidden panels), 255 text blocks per language, and 22 figure placements from the web manuals are retained. This is document QA, not a new hardware test or optical-output certification.
+
+- [Korean PDF](downloads/MASKLESS_LITHO_v2_1_5_Manual_ko.pdf)
+- [English PDF](downloads/MASKLESS_LITHO_v2_1_5_Manual_en.pdf)
+- [Korean web manual](https://loveeuge.github.io/maskless-litho-manual-20260604-1959/)
+- [English web manual](https://loveeuge.github.io/maskless-litho-manual-en-v2105/)
+
+Each manual site also hosts its own language's PDF in `downloads/`, with a download link at the top. Same-origin static links work without JavaScript, GitHub sign-in, or release API availability. `downloads/manuals.json` records the exact sizes and SHA-256 digests. Keep the three sites' copies identical. PDF links to application release notes use the public download mirror rather than requiring access to the private source repository.
+
+### Rebuild and verify
+
+Run on Windows with Python 3.10+ and the installed Malgun Gothic regular/bold fonts. The source directories must contain the complete manual `index.html` and `assets/img` from the two manual repositories, or their locally generated equivalents. No instrument connection or application execution is required.
+
+```powershell
+python -m pip install -r tools/requirements-pdf.txt
+python tools/build_manual_pdf.py --ko-source <korean-manual-folder> --en-source <english-manual-folder> --output output/pdf --date 2026-10-28
+New-Item -ItemType Directory -Force tmp/pdfs/ko,tmp/pdfs/en
+pdftoppm -r 120 -png output/pdf/MASKLESS_LITHO_v2_1_5_Manual_ko.pdf tmp/pdfs/ko/page
+pdftoppm -r 120 -png output/pdf/MASKLESS_LITHO_v2_1_5_Manual_en.pdf tmp/pdfs/en/page
+python tools/inspect_manual_pdf.py output/pdf/MASKLESS_LITHO_v2_1_5_Manual_ko.pdf tmp/pdfs/ko
+python tools/inspect_manual_pdf.py output/pdf/MASKLESS_LITHO_v2_1_5_Manual_en.pdf tmp/pdfs/en
+```
+
+Generation fails on missing text, unsupported HTML elements, missing images, or missing font glyphs. Inspect every rendered page/contact sheet for layout, and check detailed text/table pages at full resolution. After approval, copy the PDFs into this repository's `downloads/` and each manual site's `downloads/`; update `manuals.json` from the generated `.qa.json` reports. Rebuilds can change the PDF digest because metadata includes a creation timestamp. Commit only the approved static PDFs, manifest, source tools, and website changes, not `tmp/`, `output/`, or local absolute-path QA reports. When updating the source manual generator, retain its localized `downloads/...pdf` hero link.
+
 ## Local preview
 
 Serve the static files with a local HTTP server:
@@ -64,5 +91,5 @@ Open `http://127.0.0.1:8000/`. An internet connection is required to load GitHub
 ## Tests
 
 ```powershell
-node --test tests/i18n.test.mjs tests/release-data.test.mjs
+node --test tests/i18n.test.mjs tests/release-data.test.mjs tests/manual-downloads.test.mjs
 ```

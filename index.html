@@ -21,8 +21,8 @@
       content="https://loveeuge.github.io/maskless-download-site/assets/plancklab-hero.jpg"
     />
     <title data-i18n="pageTitle">마스크리스 SW 다운로드 | PLANCK MASKLESS LITHO</title>
-    <link rel="stylesheet" href="styles.css?v=20260923-v215-2" />
-    <script src="script.js?v=20260923-v215-2" type="module"></script>
+    <link rel="stylesheet" href="styles.css?v=20261028-manual-pdf-1" />
+    <script src="script.js?v=20261028-manual-pdf-1" type="module"></script>
   </head>
   <body>
     <a class="skip-link" href="#releases" data-i18n="skipLink">릴리즈 목록으로 건너뛰기</a>
@@ -40,6 +40,7 @@
       <nav class="top-nav" data-i18n-aria-label="mainNavigation" aria-label="주요 메뉴">
         <a href="#latest" data-i18n="latestReleaseNav">최신 버전</a>
         <a href="#releases" data-i18n="allReleasesNav">모든 버전</a>
+        <a href="#manuals" data-i18n="manualNav">매뉴얼 PDF</a>
         <a href="https://www.planck.co.kr/" target="_blank" rel="noreferrer" data-i18n="companyWebsite">회사 홈페이지</a>
       </nav>
       </div>
@@ -66,6 +67,7 @@
               <span data-i18n="loadingLatest">최신 버전 불러오는 중</span>
             </a>
             <a class="button button-ghost" href="#releases" data-i18n="browseHistory">버전 기록 보기</a>
+            <a class="button button-ghost" href="#manuals" data-i18n="manualNav">매뉴얼 PDF</a>
           </div>
 
           <p class="hero-meta" id="latest-meta" aria-live="polite" data-i18n="fetchingReleases">GitHub에서 릴리즈 정보를 확인하고 있습니다.</p>
@@ -125,6 +127,33 @@
           </svg>
           <span><strong data-i18n="githubHosted">GitHub에서 제공</strong><span data-i18n="originalFiles">원본 릴리즈 파일 제공</span></span>
         </div>
+      </section>
+
+      <section class="manual-downloads" id="manuals" aria-labelledby="manuals-title">
+        <p class="section-kicker">MASKLESS LITHO v2.1.5</p>
+        <h2 id="manuals-title" data-i18n="manualTitle">운용 매뉴얼 다운로드</h2>
+        <p class="manual-intro" data-i18n="manualIntro">일반 버전의 설치부터 장비 설정, 노광, 문제 해결까지. 웹 매뉴얼의 24개 항목과 모든 탭 내용을 PDF에 담았습니다.</p>
+        <div class="manual-grid">
+          <article aria-labelledby="manual-ko-title">
+            <span class="file-type">KOR / PDF</span>
+            <h3 id="manual-ko-title" data-i18n="manualKoTitle">한글 매뉴얼</h3>
+            <p data-i18n="manualKoHelp">한국어로 설명한 절차와 실제 UI 화면을 오프라인에서 확인하세요.</p>
+            <div class="manual-actions">
+              <a class="button button-dark" href="downloads/MASKLESS_LITHO_v2_1_5_Manual_ko.pdf" download hreflang="ko" type="application/pdf" data-i18n="manualKoDownload">한글 PDF 다운로드</a>
+              <a class="manual-web-link" href="https://loveeuge.github.io/maskless-litho-manual-20260604-1959/" hreflang="ko" data-i18n="manualKoWeb">한글 웹 매뉴얼 보기</a>
+            </div>
+          </article>
+          <article aria-labelledby="manual-en-title">
+            <span class="file-type">EN / PDF</span>
+            <h3 id="manual-en-title" data-i18n="manualEnTitle">영문 매뉴얼</h3>
+            <p data-i18n="manualEnHelp">같은 내용을 영문으로 제공하며, 목차와 문서 내 링크로 빠르게 이동할 수 있습니다.</p>
+            <div class="manual-actions">
+              <a class="button button-dark" href="downloads/MASKLESS_LITHO_v2_1_5_Manual_en.pdf" download hreflang="en" type="application/pdf" data-i18n="manualEnDownload">영문 PDF 다운로드</a>
+              <a class="manual-web-link" href="https://loveeuge.github.io/maskless-litho-manual-en-v2105/" hreflang="en" data-i18n="manualEnWeb">영문 웹 매뉴얼 보기</a>
+            </div>
+          </article>
+        </div>
+        <p class="manual-note" data-i18n="manualNote">v2.1.5 Standard Edition · 문서 업데이트: 2026-10-28 · PDF는 로그인 없이 다운로드할 수 있습니다. 실제 장비 사용 전 안전 절차를 확인하세요.</p>
       </section>
 
       <section class="releases-section" id="releases">

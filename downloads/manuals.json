@@ -1,0 +1,21 @@
+{
+  "version": "2.1.5",
+  "edition": "Standard Edition",
+  "updated": "2026-10-28",
+  "manuals": [
+    {
+      "language": "ko",
+      "file": "MASKLESS_LITHO_v2_1_5_Manual_ko.pdf",
+      "pages": 32,
+      "bytes": 444675,
+      "sha256": "76c25c11a74a22369a4f63a7a340ed76f10dcf2c8b4016e93bb68e3a334ed4d0"
+    },
+    {
+      "language": "en",
+      "file": "MASKLESS_LITHO_v2_1_5_Manual_en.pdf",
+      "pages": 32,
+      "bytes": 337907,
+      "sha256": "8320f81d070453ae8a08de486775d5f1984e4f678dd41f3c0f050604d5d47eac"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+beautifulsoup4==4.15.0
+Pillow==12.3.0
+pdfplumber==0.11.9
+pypdf==6.10.2
+reportlab==4.4.9

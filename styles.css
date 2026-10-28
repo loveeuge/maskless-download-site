@@ -545,6 +545,7 @@ svg {
 
 .releases-section,
 .download-guide,
+.manual-downloads,
 .system-requirements {
   width: min(1180px, calc(100% - 48px));
   margin: 0 auto;
@@ -565,6 +566,7 @@ svg {
 
 .section-heading h2,
 .download-guide h2,
+.manual-downloads h2,
 .system-requirements h2 {
   margin: 0;
   font-size: clamp(31px, 4vw, 46px);
@@ -1043,6 +1045,64 @@ svg {
   padding-bottom: 100px;
 }
 
+.manual-intro,
+.manual-note {
+  max-width: 900px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.manual-intro {
+  margin: 20px 0 28px;
+}
+
+.manual-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.manual-grid article {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--white);
+}
+
+.manual-grid h3 {
+  margin: 20px 0 10px;
+  font-size: 22px;
+}
+
+.manual-grid p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.manual-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  margin-top: 26px;
+}
+
+.manual-web-link {
+  color: #445bd1;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.manual-note {
+  margin: 22px 0 0;
+  font-size: 12px;
+}
+
 .specs-intro,
 .specs-footnote {
   max-width: 900px;
@@ -1239,6 +1299,7 @@ svg {
   .summary-strip,
   .releases-section,
   .download-guide,
+  .manual-downloads,
   .system-requirements {
     width: min(100% - 32px, 1180px);
   }
@@ -1308,6 +1369,14 @@ svg {
 
   .guide-grid {
     grid-template-columns: 1fr;
+  }
+
+  .manual-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .manual-downloads {
+    padding-top: 64px;
   }
 
   .system-requirements {
